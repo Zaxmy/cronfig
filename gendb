@@ -21,82 +21,82 @@ DROP TABLE IF EXISTS water;
 '''
 
 def pairs(lst,sep):
-	r={}
-	for el in lst:
-		(head,s,tail) = el.partition(sep)
-		r[head] = tail
-	return(r)
+   r={}
+   for el in lst:
+      (head,s,tail) = el.partition(sep)
+      r[head] = tail
+   return(r)
 
 def getData(filename,database):
 # db stuff
-	temp=0
-	rain=0
-	wind=0
-	water=0
-	ins_wind = "INSERT INTO wind (t,gust,wind,direction) VALUES (%d,%f,%f,%f);"
-	ins_temp = "INSERT INTO temp (t,temp,humidity) VALUES (%d,%f,%f);"
-	ins_water = "INSERT INTO water (t,temp,humidity) VALUES (%d,%f,%f);"
-	ins_rain = "INSERT INTO rain (t,total,rate) VALUES (%d,%f,%f);"
-	conn = sqlite3.connect(database) or die("Error opening database %s\n" % database)
-	c = conn.cursor()
-# logfile	
-	data = []
-	f = open(filename, 'rb')
-	line = f.readline()	
-	while line:
+   temp=0
+   rain=0
+   wind=0
+   water=0
+   ins_wind = "INSERT INTO wind (t,gust,wind,direction) VALUES (%d,%f,%f,%f);"
+   ins_temp = "INSERT INTO temp (t,temp,humidity) VALUES (%d,%f,%f);"
+   ins_water = "INSERT INTO water (t,temp,humidity) VALUES (%d,%f,%f);"
+   ins_rain = "INSERT INTO rain (t,total,rate) VALUES (%d,%f,%f);"
+   conn = sqlite3.connect(database) or die("Error opening database %s\n" % database)
+   c = conn.cursor()
+# logfile   
+   data = []
+   f = open(filename, 'rb')
+   line = f.readline()  
+   while line:
       # PARSE LOGFILE DATA
-		s={}
-		s = pairs(line[30:-1].rsplit(';'),':')
-		s['datum']=line[:10].replace('.','-')
-		s['tid'] = line[11:19]
-		time = s['datum'] + " " + entry['tid']
-		date = dt.datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
-		s['timestamp'] = calendar.timegm(date.timetuple())
+      s={}
+      s = pairs(line[30:-1].rsplit(';'),':')
+      s['datum']=line[:10].replace('.','-')
+      s['tid'] = line[11:19]
+      time = s['datum'] + " " + entry['tid']
+      date = dt.datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
+      s['timestamp'] = calendar.timegm(date.timetuple())
       # ADD TO DATABASE
-		if s['model']=='1984':
-			q = ins_wind % (s['timestamp'],float(s['windgust']),float(s['windaverage']),float(s['winddirection']))
-			wind +=  1
-			c.execute(q)
-		if s['model']=='F824':
-			q = ins_temp % (s['timestamp'],float(s['temp']),float(s['humidity']))
-			temp += 1
-			c.execute(q)
-		if s['model']=='2914':
-			q = ins_rain % (s['timestamp'],float(s['raintotal']),float(s['rainrate']))
-			rain += 1
-			c.execute(q)
-		if s['model']=='temperaturehumidity' and s['id'] == '11':
-			q = ins_water % (s['timestamp'],float(s['temp']),float(s['humidity']))
-			water += 1
-			c.execute(q)
-      # NEXT LOGLINE	
-		line = f.readline()
-	f.close()
-	conn.commit()
-	conn.close()
-	return((temp,rain,wind,water))
+      if s['model']=='1984':
+         q = ins_wind % (s['timestamp'],float(s['windgust']),float(s['windaverage']),float(s['winddirection']))
+         wind +=  1
+         c.execute(q)
+      if s['model']=='F824':
+         q = ins_temp % (s['timestamp'],float(s['temp']),float(s['humidity']))
+         temp += 1
+         c.execute(q)
+      if s['model']=='2914':
+         q = ins_rain % (s['timestamp'],float(s['raintotal']),float(s['rainrate']))
+         rain += 1
+         c.execute(q)
+      if s['model']=='temperaturehumidity' and s['id'] == '11':
+         q = ins_water % (s['timestamp'],float(s['temp']),float(s['humidity']))
+         water += 1
+         c.execute(q)
+      # NEXT LOGLINE 
+      line = f.readline()
+   f.close()
+   conn.commit()
+   conn.close()
+   return((temp,rain,wind,water))
 
 #data = getdata('comp.log')
 
 def initDB(database):
-	global DROP_TABLES
-	global CREATE_TABLES
-	conn = sqlite3.connect(database) or die("Error opening database %s\n" % database)
-	c = conn.cursor()
-	c.executescript(DROP_TABLES)
-	c.executescript(CREATE_TABLES)
-	conn.commit()
+   global DROP_TABLES
+   global CREATE_TABLES
+   conn = sqlite3.connect(database) or die("Error opening database %s\n" % database)
+   c = conn.cursor()
+   c.executescript(DROP_TABLES)
+   c.executescript(CREATE_TABLES)
+   conn.commit()
    conn.close()
 
 def main():
-	parser = optparse.OptionParser()
-	parser.add_option('-d','--database', dest="output_db",default="weather.db")
-	parser.add_option('-i','--input', dest="input_data",default="data")
-	options, leftovers = parser.parse_args()
+   parser = optparse.OptionParser()
+   parser.add_option('-d','--database', dest="output_db",default="weather.db")
+   parser.add_option('-i','--input', dest="input_data",default="data")
+   options, leftovers = parser.parse_args()
    # WARNING FLUSHES DB
    initDB(options.output_db)
-	D = interpretData(I,options.output_db)
-	print("\nData imported\n####################\nTemperature: %d entries\nWind: %d entries\nRain: %d entries\nWater: %d entries\n" % D)
+   D = interpretData(I,options.output_db)
+   print("\nData imported\n####################\nTemperature: %d entries\nWind: %d entries\nRain: %d entries\nWater: %d entries\n" % D)
 main()
 
 
