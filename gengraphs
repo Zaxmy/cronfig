@@ -34,115 +34,193 @@ def moving_average(x, window_size):
     window= np.ones(int(window_size))/float(window_size)
     a =  np.convolve(x, window, mode='same')
     return a
-#	Wya = numpy.array(D['W']['Average'][-ent*3:])
-#	Wyg = numpy.array(D['W']['Gust'][-ent*3:])
+#  Wya = numpy.array(D['W']['Average'][-ent*3:])
+#  Wyg = numpy.array(D['W']['Gust'][-ent*3:])
 
-#	Rx = [dt.datetime.strptime(d,'%Y.%m.%d %H:%M:%S') for d in D['R']['Date'][-ent:]]
-#	Ryt = numpy.array(D['R']['Raintotal'][-ent:])
-#	Ryr = numpy.array(D['R']['Rainrate'][-ent:])
-#	Rym = numpy.array(D['R']['Rainmonth'][-ent:])
-#	Ryd = numpy.array(D['R']['Rainday'][-ent:])
+#  Rx = [dt.datetime.strptime(d,'%Y.%m.%d %H:%M:%S') for d in D['R']['Date'][-ent:]]
+#  Ryt = numpy.array(D['R']['Raintotal'][-ent:])
+#  Ryr = numpy.array(D['R']['Rainrate'][-ent:])
+#  Rym = numpy.array(D['R']['Rainmonth'][-ent:])
+#  Ryd = numpy.array(D['R']['Rainday'][-ent:])
 
-#	plt.xkcd()	
-#	plt.style.context('fivethirtyeight')
-#	plt.subplot(2,2,1)
-#	plt.gca().set_ylabel(u"C")
-#	plt.plot(Tx,Tyt,'r-')
-#	plt.title("Temperature")
-#	plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
-#	plt.gca().xaxis.set_major_locator(mdates.DayLocator())
-#	plt.ylim([Tyt.min()-1.0,Tyt.max()+1.0])
-#	plt.subplot(2,2,2)
-#	plt.gca().set_ylabel("%")
-#	plt.plot(Tx,Tyh,'b-')
-#	plt.ylim([max(0,Tyh.min()-10),min(Tyh.max()+10,100)])
-#	plt.title("Relative humidity")
-#	plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
-#	plt.subplot(2,2,3)
-#	plt.gca().set_ylabel("m/s")
-#	plt.plot(Wx,Wya,'g-')
-#	plt.title("Wind average")
-#	plt.plot(Wx,Wyg)
-#	plt.plot(Wx,Wya)
-#	plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
-#	plt.gca().xaxis.set_major_locator(mdates.DayLocator())
-#	plt.subplot(2,2,4)
-#	plt.gca().set_ylabel("total mm per month",color="b")
-#	for tl in plt.gca().get_yticklabels():
-#		tl.set_color('b')
-#	plt.plot(Rx,Rym,color="b")
-#	plt.twinx()
-#	plt.gca().set_ylabel("total mm per day",color="g")
-#	for tl in plt.gca().get_yticklabels():
-#		tl.set_color("g")
-#	plt.plot(Rx,Ryd,color="g")
-#	plt.title("Rain")
-#	plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
-#	plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+#  plt.xkcd()  
+#  plt.style.context('fivethirtyeight')
+#  plt.subplot(2,2,1)
+#  plt.gca().set_ylabel(u"C")
+#  plt.plot(Tx,Tyt,'r-')
+#  plt.title("Temperature")
+#  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
+#  plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+#  plt.ylim([Tyt.min()-1.0,Tyt.max()+1.0])
+#  plt.subplot(2,2,2)
+#  plt.gca().set_ylabel("%")
+#  plt.plot(Tx,Tyh,'b-')
+#  plt.ylim([max(0,Tyh.min()-10),min(Tyh.max()+10,100)])
+#  plt.title("Relative humidity")
+#  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
+#  plt.subplot(2,2,3)
+#  plt.gca().set_ylabel("m/s")
+#  plt.plot(Wx,Wya,'g-')
+#  plt.title("Wind average")
+#  plt.plot(Wx,Wyg)
+#  plt.plot(Wx,Wya)
+#  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
+#  plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+#  plt.subplot(2,2,4)
+#  plt.gca().set_ylabel("total mm per month",color="b")
+#  for tl in plt.gca().get_yticklabels():
+#     tl.set_color('b')
+#  plt.plot(Rx,Rym,color="b")
+#  plt.twinx()
+#  plt.gca().set_ylabel("total mm per day",color="g")
+#  for tl in plt.gca().get_yticklabels():
+#     tl.set_color("g")
+#  plt.plot(Rx,Ryd,color="g")
+#  plt.title("Rain")
+#  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d:e'))
+#  plt.gca().xaxis.set_major_locator(mdates.DayLocator())
 
 # Month: SELECT datetime(temp.t, 'unixepoch'),temp.temp FROM temp where temp.t BETWEEN strftime('%s','2015-02-01') AND strftime('%s','2015-03-01');
 # 2015-02-28 23:48:38|1.3
 
 # Week:
 def ThemeOne(X,Y,lblX,lblY,title,xMajorL,xMajorF,xMinorL,xMinorF,filename,yLimMin=1.0,yLimMax=1.0,average=True):
-	plt.gca().set_ylabel(lblY)
+   plt.clf()
+   plt.gca().set_ylabel(lblY)
 
-	plt.plot(X,Y,color=(0.1,0.5,0.1),linestyle='-')
-	if average:
-		Ya =  moving_average(Y, len(Y)/60)
-		plt.plot(X,Ya,color=(0.1,0.2,0.1),linestyle='-',linewidth=2.0)
-	plt.title(title)
-	plt.gca().xaxis.set_major_formatter(xMajorF)
-	plt.gca().xaxis.set_major_locator(xMajorL)
-	plt.gca().xaxis.set_minor_locator(xMinorL)
-	plt.grid(b=True,which='major',color=(0.7,0.7,1.0),linestyle='-')
-	plt.grid(b=True,which='minor',color=(0.8,0.8,1.0),linestyle='-')
+   plt.plot(X,Y,color=(0.1,0.5,0.1),linestyle='-')
+   if average:
+      Ya =  moving_average(Y, len(Y)/60)
+      plt.plot(X,Ya,color=(0.1,0.2,0.1),linestyle='-',linewidth=2.0)
+   plt.title(title)
+   plt.gca().xaxis.set_major_formatter(xMajorF)
+   plt.gca().xaxis.set_major_locator(xMajorL)
+   plt.gca().xaxis.set_minor_locator(xMinorL)
+   plt.grid(b=True,which='major',color=(0.7,0.7,1.0),linestyle='-')
+   plt.grid(b=True,which='minor',color=(0.8,0.8,1.0),linestyle='-')
 
-#		plt.minorticks_on()
-	plt.ylim([Y.min()-yLimMin,Y.max()+yLimMax])
-	fig = plt.gcf()
-	fig.set_size_inches(16,9)
-	plt.savefig(filename,dpi=150)
-	plt.show()
-	plt.close()
+#     plt.minorticks_on()
+   plt.ylim([Y.min()-yLimMin,Y.max()+yLimMax])
+   fig = plt.gcf()
+   fig.set_size_inches(16,9)
+   plt.savefig(filename,dpi=150)
+   plt.show()
+   plt.close()
+
+def ThemeTwo(X,Y,X2,Y2,lblX,lblY,title,xMajorL,xMajorF,xMinorL,xMinorF,filename,yLimMin=1.0,yLimMax=1.0,average=True,both=True):
+   plt.clf()
+   plt.gca().set_ylabel(lblY)
+
+   if both:
+      plt.plot(X,Y,color=(0.1,0.5,0.1),linestyle='-')
+   if average:
+      Ya =  moving_average(Y, len(Y)/60)
+      plt.plot(X,Ya,color=(0.1,0.4,0.1),linestyle='-',linewidth=2.0)
+
+   if both:
+      plt.plot(X2,Y2,color=(0.5,0.1,0.1),linestyle='-')
+   if average:
+      Y2a =  moving_average(Y2, len(Y2)/60)
+      plt.plot(X2,Y2a,color=(0.4,0.1,0.1),linestyle='-',linewidth=2.0)
+
+
+   plt.title(title)
+   plt.gca().xaxis.set_major_formatter(xMajorF)
+   plt.gca().xaxis.set_major_locator(xMajorL)
+   plt.gca().xaxis.set_minor_locator(xMinorL)
+   plt.grid(b=True,which='major',color=(0.7,0.7,1.0),linestyle='-')
+   plt.grid(b=True,which='minor',color=(0.8,0.8,1.0),linestyle='-')
+
+#     plt.minorticks_on()
+   y1_min=Y.min()-yLimMin
+   y2_min=Y2.min()-yLimMin
+   if y1_min < y2_min:
+      y_min=y1_min
+   else:
+      y_min=y2_min 
+
+   y1_max=Y.max()-yLimMax
+   y2_max=Y2.max()-yLimMax
+   if y1_max < y2_max:
+      y_max=y1_max
+   else:
+      y_max=y2_max 
+
+   plt.ylim([y_min,y_max])
+   fig = plt.gcf()
+   fig.set_size_inches(16,9)
+   plt.savefig(filename,dpi=150)
+   plt.show()
+   plt.close()
+
+
 
 def tempMonths(c,y):
-	for i in range(1,13):	
-		c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp WHERE temp.t BETWEEN strftime('%%s','%d-%02d-01') AND strftime('%%s','%d-%02d-01');" % (y,i,y,i+1));
-		data = c.fetchall()
-		if not len(data):
-			break	
-		Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
-		Tyt = np.array([ d[1] for d in data ])
-		Tyh = np.array([ d[2] for d in data ])
-		ThemeOne(Tx,Tyt,u"Date",u"C",
-			"Temperatures in %s" %(calendar.month_name[i]),
-			mdates.DayLocator(), mdates.DateFormatter('%d'),
-			mdates.HourLocator(byhour=range(0,24,12)),None,
-			"%d_%02d_temp.png" % (y,i) )
+   for i in range(1,13):   
+      c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp WHERE temp.t BETWEEN strftime('%%s','%d-%02d-01') AND strftime('%%s','%d-%02d-01');" % (y,i,y,i+1));
+      data = c.fetchall()
+      if not len(data):
+        return 
+      Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
+      Tyt = np.array([ d[1] for d in data ])
+#      Tyh = np.array([ d[2] for d in data ])
+      ThemeOne(Tx,Tyt,u"Date",u"C",
+         "Temperatures in %s (%d)" %(calendar.month_name[i],y),
+         mdates.DayLocator(), mdates.DateFormatter('%d'),
+         mdates.HourLocator(byhour=range(0,24,12)),None,
+         "%d_%02d_temp.png" % (y,i) )
 
 def tempYear(c,y):
-	c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp where date(datetime(temp.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
-	data = c.fetchall()
-	Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
-	Tyt = np.array([ d[1] for d in data ])
-	Tyh = np.array([ d[2] for d in data ])
-	ThemeOne(Tx,Tyt,"Date",u"C",
-		"Temperatures in  %d" % (y),
-		mdates.MonthLocator(), mdates.DateFormatter('%b'),
-		mdates.DayLocator(),None,
-		"%d_temp.png"%(y) )
+   c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp where date(datetime(temp.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
+   data = c.fetchall()
+   if not len(data):
+      return
+   Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
+   Tyt = np.array([ d[1] for d in data ])
+#   Tyh = np.array([ d[2] for d in data ])
+   ThemeOne(Tx,Tyt,"Date",u"C",
+      "Temperatures in  %d" % (y),
+      mdates.MonthLocator(), mdates.DateFormatter('%b'),
+      mdates.DayLocator(),None,
+      "%d_temp.png"%(y) )
+
+def tempYearTwo(c,y1,y2):
+   c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp where date(datetime(temp.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y1,y1));
+   data1 = c.fetchall()
+   if not len(data1):
+      return
+   c.execute("SELECT datetime(temp.t,'unixepoch'),temp.temp,temp.humidity FROM temp where date(datetime(temp.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y2,y2));
+   data2 = c.fetchall()
+   if not len(data2):
+      return
+ 
+   Tx = [dt.datetime.strptime(d[0].replace(str(y1),'2000'),'%Y-%m-%d %H:%M:%S') for d in data1]
+   Tyt = np.array([ d[1] for d in data1 ])
+   Tx2 = [dt.datetime.strptime(d[0].replace(str(y2),'2000'),'%Y-%m-%d %H:%M:%S') for d in data2]
+   Tyt = np.array([ d[1] for d in data1 ])
+ 
+   Ty2t = np.array([ d[1] for d in data2 ])
+#   Tyh = np.array([ d[2] for d in data ])
+   ThemeTwo(Tx,Tyt,Tx2,Ty2t,"Date",u"C",
+      "Temperatures in  %d,%d" % (y1,y2),
+      mdates.MonthLocator(), mdates.DateFormatter('%b'),
+      mdates.DayLocator(),None,
+      "%d_%d_temp.png"%(y1,y2),average=True,both=False)
+
+
 def waterYear(c,y):
-	c.execute("SELECT datetime(water.t,'unixepoch'),water.temp,water.humidity FROM water where date(datetime(water.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
-	data = c.fetchall()
-	Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
-	Tyt = np.array([ d[1] for d in data ])
-	Tyh = np.array([ d[2] for d in data ])
-	ThemeOne(Tx,Tyt,"Date",u"C",
-		"Temperatures in  %d" % (y),
-		mdates.MonthLocator(), mdates.DateFormatter('%b'),
-		mdates.DayLocator(),None,
-		"%d_water.png"%(y) )
+   c.execute("SELECT datetime(water.t,'unixepoch'),water.temp,water.humidity FROM water where date(datetime(water.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
+   data = c.fetchall()
+   if not len(data):
+      return
+   Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
+   Tyt = np.array([ d[1] for d in data ])
+#   Tyh = np.array([ d[2] for d in data ])
+   ThemeOne(Tx,Tyt,"Date",u"C",
+      "Humidity in  %d" % (y),
+      mdates.MonthLocator(), mdates.DateFormatter('%b'),
+      mdates.DayLocator(),None,
+      "%d_water.png"%(y) )
 
 def new_axes():
     fig = plt.figure(figsize=(8, 8), dpi=80, facecolor='w', edgecolor='w')
@@ -156,70 +234,74 @@ def set_legend(ax):
     plt.setp(l.get_texts(), fontsize=8)
  
 def windYear(c,y):
-	#c.execute("SELECT datetime(wind.t,'unixepoch'),wind.wind,wind.direction FROM wind where wind.wind between 1.5 and 5.0 AND date(datetime(wind.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
-	c.execute("SELECT datetime(wind.t,'unixepoch'),wind.wind,wind.direction FROM wind where date(datetime(wind.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
-	data = c.fetchall()
-	T = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
-	W = np.array([ d[1] for d in data ])
-	X = np.array([ math.cos((d[2])/(np.pi/180.0)-np.pi/2)*d[1] for d in data ])
-	D = np.array([ d[2] for d in data ])
-	Y = np.array([ math.sin(d[2]/(np.pi/180.0)-np.pi/2)*d[1] for d in data ])
-	#C = W/W.max()
-	plt.subplot(2,2,1) #,polar=True)
-	c = plt.hexbin(X,Y,gridsize=100,bins='log',cmap=plt.cm.jet)
-	c.set_alpha(0.85)
-	plt.subplot(2,2,2)
-	plt.hist(D,16,normed=1,facecolor='blue',alpha=0.5)
-	plt.xlabel('Direction')
-	plt.ylabel('Probability')
-	plt.title(r'Histogram of wind direction')
-	plt.subplots_adjust(left=0.15)
-	#ax = plt.subplot(2,2,3)
-	ax = new_axes()
-	ax.bar(D, W, normed=True, opening=0.8, edgecolor='white',cmap=plt.cm.hot)
-	ax.legend()
-#	set_legend(ax)
-	fig = plt.gcf()
-	fig.set_size_inches(16,9)
-	plt.savefig("%d_wind.png" % y ,dpi=150)
-	plt.show()
-	plt.close()
+   #c.execute("SELECT datetime(wind.t,'unixepoch'),wind.wind,wind.direction FROM wind where wind.wind between 1.5 and 5.0 AND date(datetime(wind.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
+   c.execute("SELECT datetime(wind.t,'unixepoch'),wind.wind,wind.direction FROM wind where date(datetime(wind.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31';" % (y,y));
+   data = c.fetchall()
+   if not len(data):
+      return
+   T = [dt.datetime.strptime(d[0],'%Y-%m-%d %H:%M:%S') for d in data]
+   W = np.array([ d[1] for d in data ])
+   X = np.array([ math.cos((d[2])/(np.pi/180.0)-np.pi/2)*d[1] for d in data ])
+   D = np.array([ d[2] for d in data ])
+   Y = np.array([ math.sin(d[2]/(np.pi/180.0)-np.pi/2)*d[1] for d in data ])
+   #C = W/W.max()
+   plt.subplot(2,2,1) #,polar=True)
+   c = plt.hexbin(X,Y,gridsize=100,bins='log',cmap=plt.cm.jet)
+   c.set_alpha(0.85)
+   plt.subplot(2,2,2)
+   plt.hist(D,16,normed=1,facecolor='blue',alpha=0.5)
+   plt.xlabel('Direction')
+   plt.ylabel('Probability')
+   plt.title(r'Histogram of wind direction %d' % (y))
+   plt.subplots_adjust(left=0.15)
+   #ax = plt.subplot(2,2,3)
+   ax = new_axes()
+   ax.bar(D, W, normed=True, opening=0.8, edgecolor='white',cmap=plt.cm.hot)
+   ax.legend()
+#  set_legend(ax)
+   fig = plt.gcf()
+   fig.set_size_inches(16,9)
+   plt.savefig("%d_wind.png" % y ,dpi=150)
+   plt.show()
+   plt.close()
 
 def rainYear(c,y):
-	#c.execute('SELECT datetime(rain.t,\'unixepoch\'),rain.total FROM rain WHERE rain.t > strftime(\'%s\',\'2015-06-01\');');
-	c.execute("select date(datetime(rain.t,'unixepoch')), max(rain.total) from rain where date(datetime(rain.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31' group by date(datetime(rain.t,'unixepoch'));" % (y,y));
-	data = c.fetchall()
-	if len(data)<1:
-		print("No results from query\n")
-		exit(-1)
-	Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d') for d in data]
-	Tyt = np.array([ diffLast(d[1]) for d in data ])
+   #c.execute('SELECT datetime(rain.t,\'unixepoch\'),rain.total FROM rain WHERE rain.t > strftime(\'%s\',\'2015-06-01\');');
+   c.execute("select date(datetime(rain.t,'unixepoch')), max(rain.total) from rain where date(datetime(rain.t,'unixepoch')) BETWEEN '%d-01-01' AND '%d-12-31' group by date(datetime(rain.t,'unixepoch'));" % (y,y));
+   data = c.fetchall()
+   if not len(data):
+      return
 
-	ThemeOne(Tx,Tyt,u"Date",u"mm",
-		"Rain in %d" % (y),
-		mdates.MonthLocator(), mdates.DateFormatter('%b'),
-		mdates.DayLocator(),None,
-		"%d_rain.png" % (y),yLimMin=0.0)
+   Tx = [dt.datetime.strptime(d[0],'%Y-%m-%d') for d in data]
+   Tyt = np.array([ diffLast(d[1]) for d in data ])
+
+   ThemeOne(Tx,Tyt,u"Date",u"mm",
+      "Rain in %d" % (y),
+      mdates.MonthLocator(), mdates.DateFormatter('%b'),
+      mdates.DayLocator(),None,
+      "%d_rain.png" % (y),yLimMin=0.0)
 
 
 
 #pylab.plot(H/100)
 #pylab.show()
 def main():
-	ent=10000
-	parser = optparse.OptionParser()
-	parser.add_option('-d','--database', dest="database",default="weather.db")
-	options, leftovers = parser.parse_args()
+   ent=10000
+   parser = optparse.OptionParser()
+   parser.add_option('-d','--database', dest="database",default="weather.db")
+   options, leftovers = parser.parse_args()
 
-	#plt.style.context('fivethirtyeighch='major', color='b', linestyle='-')t')
-	db = sqlite3.connect(options.database) or die("Error opening database")
-	c = db.cursor()
-	#tempMonths(c,2015)	
-	#tempYear(c,2015)
-	waterYear(c,2015)
-	#rainYear(c,2015)
-	#windYear(c,2015)
+   #plt.style.context('fivethirtyeighch='major', color='b', linestyle='-')t')
+   db = sqlite3.connect(options.database) or die("Error opening database")
+   c = db.cursor()
+   tempYearTwo(c,2015,2016); 
+#   for year in range(2014,2017):
+#      tempMonths(c,year)   
+#      tempYear(c,year)
+#      waterYear(c,year) dont know what i have been working on here
+#      rainYear(c,year)
+#      windYear(c,year)
 
-	db.close()
+   db.close()
 
 main()

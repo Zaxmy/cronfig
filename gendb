@@ -27,7 +27,7 @@ def pairs(lst,sep):
       r[head] = tail
    return(r)
 
-def getData(filename,database):
+def importData(filename,database):
 # db stuff
    temp=0
    rain=0
@@ -49,7 +49,7 @@ def getData(filename,database):
       s = pairs(line[30:-1].rsplit(';'),':')
       s['datum']=line[:10].replace('.','-')
       s['tid'] = line[11:19]
-      time = s['datum'] + " " + entry['tid']
+      time = s['datum'] + " " + s['tid']
       date = dt.datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
       s['timestamp'] = calendar.timegm(date.timetuple())
       # ADD TO DATABASE
@@ -95,7 +95,7 @@ def main():
    options, leftovers = parser.parse_args()
    # WARNING FLUSHES DB
    initDB(options.output_db)
-   D = interpretData(I,options.output_db)
+   D = importData(options.input_data,options.output_db)
    print("\nData imported\n####################\nTemperature: %d entries\nWind: %d entries\nRain: %d entries\nWater: %d entries\n" % D)
 main()
 
